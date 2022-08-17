@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS adverts_photos;
+
+DROP TABLE IF EXISTS adverts;

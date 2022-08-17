@@ -1,0 +1,17 @@
+bind_addr: ":8080"
+
+db:
+  username: "postgres"
+  password: "qwerty"
+  host: "localhost"
+  port: "5436"
+  dbname: "postgres"
+  sslmode: "disable"
+
+validate:
+  title_max: 200
+  description_max: 1000
+  photos_max: 3
+
+paginate:
+  adverts_page_size: 3
