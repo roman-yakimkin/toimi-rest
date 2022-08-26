@@ -3,13 +3,13 @@ package dbclient
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"toimi/internal/app/services/configmanager"
 )
 
 type PostgresDBClient struct {
 	cfg  *configmanager.Config
-	conn *pgx.Conn
+	pool *pgxpool.Pool
 }
 
 func NewPostgresDBClient(cfg *configmanager.Config) *PostgresDBClient {
@@ -28,16 +28,16 @@ func (c *PostgresDBClient) getDatabaseURL() string {
 		c.cfg.DB.SSLMode)
 }
 
-func (c *PostgresDBClient) Connect(ctx context.Context) (*pgx.Conn, error) {
+func (c *PostgresDBClient) Connect(ctx context.Context) (*pgxpool.Pool, error) {
 	var err error
 	st := c.getDatabaseURL()
-	c.conn, err = pgx.Connect(ctx, st)
+	c.pool, err = pgxpool.Connect(ctx, st)
 	if err != nil {
 		return nil, err
 	}
-	return c.conn, nil
+	return c.pool, nil
 }
 
 func (c *PostgresDBClient) Disconnect(ctx context.Context) {
-	_ = c.conn.Close(ctx)
+	c.pool.Close()
 }

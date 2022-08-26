@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"github.com/gorilla/mux"
 	"log"
@@ -26,6 +27,7 @@ func init() {
 
 func main() {
 	flag.Parse()
+	ctx := context.Background()
 	config := configmanager.NewConfig()
 	err := config.Init(configPath)
 	if err != nil {
@@ -38,7 +40,12 @@ func main() {
 		store = store_memory.NewStore(advertRepo)
 	case "postgres":
 		db := dbclient.NewPostgresDBClient(config)
-		advertRepo := postgres.NewAdvertRepo(config, db)
+		pool, err := db.Connect(ctx)
+		defer db.Disconnect(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
+		advertRepo := postgres.NewAdvertRepo(ctx, config, pool)
 		store = postgres2.NewStore(advertRepo)
 	default:
 		log.Fatal("repository not defined")
