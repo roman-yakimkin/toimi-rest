@@ -3,9 +3,14 @@ version: '3.8'
 services:
   toimi-rest:
     build: ./
-    command: bash -c  "./wait-for-postgres.sh db ./toimi-rest && ./migrate.linux-amd64 -path ./migrations -database 'postgres://postgres:qwerty@db:5432/postgres?sslmode=disable' up"
+    command:
+      - bash
+      - -c
+      - |
+        ./wait-for-postgres.sh db ./toimi-rest
+        ./util/migrate -path ./migrations -database 'postgres://postgres:qwerty@db:5432/postgres?sslmode=disable' up
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - db
     environment:
@@ -20,5 +25,5 @@ services:
       - POSTGRES_PASSWORD=qwerty
       - POSTGRES_DB=postgres
     ports:
-      - 5436:5432
+      - "5436:5432"
 
