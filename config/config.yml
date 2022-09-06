@@ -3,8 +3,8 @@ bind_addr: ":8080"
 db:
   username: "postgres"
   password: "qwerty"
-  host: "localhost"
-  port: "5436"
+  host: "db"
+  port: "5432"
   dbname: "postgres"
   sslmode: "disable"
 

@@ -7,8 +7,9 @@ services:
       - bash
       - -c
       - |
-        ./wait-for-postgres.sh db ./toimi-rest
+        ./wait-for-postgres.sh db
         ./util/migrate -path ./migrations -database 'postgres://postgres:qwerty@db:5432/postgres?sslmode=disable' up
+        ./toimi-rest
     ports:
       - "8080:8080"
     depends_on:
